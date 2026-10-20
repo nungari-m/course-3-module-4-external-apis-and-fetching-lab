@@ -1,67 +1,74 @@
 // index.js
-const weatherApi = "https://api.weather.gov/alerts/active?area="
+const stateInput = document.getElementById("state-input");
+const fetchButton = document.getElementById("fetch-alerts");
+const alertsDisplay = document.getElementById("alerts-display");
+const errorMessage = document.getElementById("error-message");
+const spinner = document.getElementById("loading-spinner");
 
-// Your code here!
+// Step 1: fetch the data
 function fetchWeatherAlerts(state) {
-    return fetch(`https://api.weather.gov/alerts/active?area=${state}`)
+  return fetch(`https://api.weather.gov/alerts/active?area=${state}`)
     .then((response) => {
-        if (!response.ok) {
-            throw new Error('Could not fetch alerts. Please check the state code.');
-        }
-        return response.json();
-});
+      if (!response.ok) {
+        throw new Error("Could not fetch alerts. Please check the state code.");
+      }
+      return response.json();
+    });
 }
 
+// Step 2: display the data
 function displayAlerts(data) {
-    alertsDisplay.textContent = "";
+  alertsDisplay.textContent = "";
 
-    const summary = document.createElement("p");
-    summary.textContent = `${data.title}: ${data.features.length}`;
-    alertsDisplay.appendChild(summary);
+  const summary = document.createElement("p");
+  summary.textContent = `${data.title}: ${data.features.length}`;
+  alertsDisplay.appendChild(summary);
 
-    const list = document.createElement("ul");
-    data.features.forEach((alert) => {
-        const li = document.createElement("li");
-        li.textContent = alert.properties.headline;
-        list.appendChild(li);
-    });
-    alertsDisplay.appendChild(list);
-};
+  const list = document.createElement("ul");
+  data.features.forEach((alert) => {
+    const li = document.createElement("li");
+    li.textContent = alert.properties.headline;
+    list.appendChild(li);
+  });
+  alertsDisplay.appendChild(list);
+}
 
+// Step 4 helpers
 function showError(message) {
-    errorMessage.textContent = message;
-    errorMessage.classList.remove("hidden");
+  errorMessage.textContent = message;
+  errorMessage.classList.remove("hidden");
 }
 
 function clearError() {
-    errorMessage.textContent = "";
-    errorMessage.classList.add("hidden");
+  errorMessage.textContent = "";
+  errorMessage.classList.add("hidden");
 }
 
 fetchButton.addEventListener("click", () => {
-    const state = stateInput.value.trim();
+  const state = stateInput.value.trim();
 
-if (!/^[A-Z]{2}$/.test(state)) {
-    alertDisplay.textContent = "";
-    showError("Please enter a valid two-letter state code.");
+  // Step 5 (optional): input validation
+  if (!/^[A-Z]{2}$/.test(state)) {
+    alertsDisplay.textContent = "";
+    showError("Please enter a valid two-letter state code in capitals, e.g. MN.");
     return;
-}
+  }
 
-spinner.classList.remove("hidden");
+  spinner.classList.remove("hidden");
 
-fetchWeatherAlerts(state)
+  fetchWeatherAlerts(state)
     .then((data) => {
-        console.log(data);
-        clearError();
-        displayAlerts(data);
-        stateInput.value = "";
+      console.log(data);   // Step 1 testing
+      clearError();         // Step 4: hide error on success
+      displayAlerts(data);  // Step 2 + 3: replaces old data
+      stateInput.value = ""; // Step 3: clear input
     })
     .catch((error) => {
-        console.log(error.message);
-        alertDisplay.textContent = "";
-        showError(error.message);   
+      console.log(error.message);
+      alertsDisplay.textContent = "";
+      showError(error.message);
     })
     .finally(() => {
-        spinner.classList.add("hidden");
+      spinner.classList.add("hidden");
     });
 });
