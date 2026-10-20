@@ -28,8 +28,17 @@ function displayAlerts(data) {
     alertsDisplay.appendChild(list);
 };
 
-fuction showError(message) {
+function showError(message) {
     errorMessage.textContent = message;
     errorMessage.classList.remove("hidden");
 }
 
+function clearError() {
+    errorMessage.textContent = "";
+    errorMessage.classList.add("hidden");
+}
+
+fetchButton.addEventListener("click", () => {
+    const state = stateInput.value.trim();
+
+    
