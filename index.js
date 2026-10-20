@@ -64,4 +64,4 @@ fetchWeatherAlerts(state)
     .finally(() => {
         spinner.classList.add("hidden");
     });
-}
+});
