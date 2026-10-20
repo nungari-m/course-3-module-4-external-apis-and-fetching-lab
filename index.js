@@ -41,4 +41,27 @@ function clearError() {
 fetchButton.addEventListener("click", () => {
     const state = stateInput.value.trim();
 
-    
+if (!/^[A-Z]{2}$/.test(state)) {
+    alertDisplay.textContent = "";
+    showError("Please enter a valid two-letter state code.");
+    return;
+}
+
+spinner.classList.remove("hidden");
+
+fetchWeatherAlerts(state)
+    .then((data) => {
+        console.log(data);
+        clearError();
+        displayAlerts(data);
+        stateInput.value = "";
+    })
+    .catch((error) => {
+        console.log(error.message);
+        alertDisplay.textContent = "";
+        showError(error.message);   
+    })
+    .finally(() => {
+        spinner.classList.add("hidden");
+    });
+}
