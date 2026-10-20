@@ -18,3 +18,18 @@ function displayAlerts(data) {
     const summary = document.createElement("p");
     summary.textContent = `${data.title}: ${data.features.length}`;
     alertsDisplay.appendChild(summary);
+
+    const list = document.createElement("ul");
+    data.features.forEach((alert) => {
+        const li = document.createElement("li");
+        li.textContent = alert.properties.headline;
+        list.appendChild(li);
+    });
+    alertsDisplay.appendChild(list);
+};
+
+fuction showError(message) {
+    errorMessage.textContent = message;
+    errorMessage.classList.remove("hidden");
+}
+
