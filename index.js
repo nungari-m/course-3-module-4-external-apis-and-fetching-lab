@@ -3,7 +3,6 @@ const stateInput = document.getElementById("state-input");
 const fetchButton = document.getElementById("fetch-alerts");
 const alertsDisplay = document.getElementById("alerts-display");
 const errorMessage = document.getElementById("error-message");
-spinner?.classList.remove("hidden");
 
 // Step 1: fetch the data
 function fetchWeatherAlerts(state) {
@@ -56,8 +55,6 @@ fetchButton.addEventListener("click", () => {
     return;
   }
 
-  spinner.classList.remove("hidden");
-
   fetchWeatherAlerts(state)
     .then((data) => {
       console.log(data);   // Step 1 testing
@@ -69,8 +66,6 @@ fetchButton.addEventListener("click", () => {
       console.log(error.message);
       alertsDisplay.textContent = "";
       showError(error.message);
-    })
-    .finally(() => {
-      spinner?.classList.add("hidden");
+    
     });
 });
