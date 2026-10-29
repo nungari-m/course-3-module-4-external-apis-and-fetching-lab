@@ -3,7 +3,7 @@ const stateInput = document.getElementById("state-input");
 const fetchButton = document.getElementById("fetch-alerts");
 const alertsDisplay = document.getElementById("alerts-display");
 const errorMessage = document.getElementById("error-message");
-const spinner = document.getElementById("loading-spinner");
+spinner?.classList.remove("hidden");
 
 // Step 1: fetch the data
 function fetchWeatherAlerts(state) {
@@ -35,11 +35,13 @@ function displayAlerts(data) {
 
 // Step 4 helpers
 function showError(message) {
+  if (!errorMessage) return;
   errorMessage.textContent = message;
   errorMessage.classList.remove("hidden");
 }
 
 function clearError() {
+  if (!errorMessage) return;
   errorMessage.textContent = "";
   errorMessage.classList.add("hidden");
 }
@@ -69,6 +71,6 @@ fetchButton.addEventListener("click", () => {
       showError(error.message);
     })
     .finally(() => {
-      spinner.classList.add("hidden");
+      spinner?.classList.add("hidden");
     });
 });
